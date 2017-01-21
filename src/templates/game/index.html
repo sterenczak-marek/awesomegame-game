@@ -1,0 +1,86 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Awesome Game</title>
+
+    <link href="{% static 'vendor/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet" />
+
+    <script src="{% static 'vendor/phaser/build/phaser.js' %}"></script>
+
+
+    <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
+
+
+    <script src="{% static 'vendor/socket.io-client/dist/socket.io.js' %}"></script>
+    {#        <script src="{% static 'script/jquery.colorbox-min.js' %}"></script>#}
+    <script src="{% static 'vendor/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+
+
+    {#    <script src="{% static 'script/pace.min.js' %}"></script>#}
+    {#    <script src="{% static 'script/jquery.realperson.min.js' %}"></script>#}
+    {#    <script src="{% static 'script/bootstrap-select.min.js' %}"></script>#}
+    {#    <script src="{% static 'script/jquery.countdown.js' %}"></script>#}
+    {#    <script src="{% static 'script/jquery.countdown2.js' %}"></script>#}
+    {#    <script src="{% static 'script/jQueryRotateCompressed.js' %}"></script>#}
+
+
+
+    <!-- TweenJs -->
+    {#        <script src="{% static 'lib/tweenjs/easeljs-NEXT.min.js' %}"></script>#}
+    {#        <script src="{% static 'lib/tweenjs/Event.js' %}"></script>#}
+    {#        <script src="{% static 'lib/tweenjs/EventDispatcher.js' %}"></script>#}
+    {#        <script src="{% static 'lib/tweenjs/Tween.js' %}"></script>#}
+    {#        <script src="{% static 'lib/tweenjs/Ease.js' %}"></script>#}
+
+</head>
+
+<body onload="createGame();">
+
+    {{ user }}
+
+    <div class="container" style="margin-top: 50px;">
+        <div class="row">
+            <div id="game" class="text-center"></div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/ws4redis.js' %}" type="text/javascript"></script>
+    <script type="text/javascript">
+        var playerNick = "{{ user.username }}",
+                pos_x = {{ x }},
+                pos_y = {{ y }};
+    </script>
+
+    <script src="{% static 'app/sockets.js' %}"></script>
+    <script type="text/javascript">
+        var ws4redis = WS4Redis({
+            uri: '{{ WEBSOCKET_URI }}{{ user.room.slug }}?subscribe-broadcast&publish-broadcast',
+            receive_message: receiveMessage,
+            heartbeat_msg: {{ WS4REDIS_HEARTBEAT }}
+        });
+    </script>
+
+    <script src="{% static 'app/global.js' %}"></script>
+    <script src="{% static 'app/constants.js' %}"></script>
+
+    <script src="{% static 'app/main.js' %}"></script>
+    <script src="{% static 'app/sockets.js' %}"></script>
+
+    <script src="{% static 'app/controller.js' %}"></script>
+    <script src="{% static 'app/model.js' %}"></script>
+
+    <script src="{% static 'app/bonuses/Bonus.js' %}"></script>
+    <script src="{% static 'app/bonuses/BonusList.js' %}"></script>
+    <script src="{% static 'app/bonuses/SpeedUp.js' %}"></script>
+    <script src="{% static 'app/bonuses/SlowDown.js' %}"></script>
+    <script src="{% static 'app/bonuses/RegenerateHP.js' %}"></script>
+
+    <script src="{% static 'app/mapObjects/MapObject.js' %}"></script>
+    <script src="{% static 'app/mapObjects/Wall.js' %}"></script>
+
+    <script src="{% static 'app/game.js' %}"></script>
+</body>
+</html>

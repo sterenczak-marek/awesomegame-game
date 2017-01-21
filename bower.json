@@ -1,0 +1,22 @@
+{
+  "name": "AwesomeGameServer",
+  "version": "0.1",
+  "license": "GPL",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.1",
+    "font-awesome": "~4.2.0",
+    "reset-css": "",
+    "jquery": "",
+    "lodash": "3.7.0",
+    "phaser": "~2.6.1",
+    "socket.io-client": "0.9.16"
+  }
+}

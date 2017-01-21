@@ -1,0 +1,16 @@
+Django>=1.9,<1.10
+psycopg2
+psycogreen
+djangorestframework
+django-environ
+
+celery==3.1.21
+
+django-websocket-redis==0.4.6
+
+pyyaml
+
+git+https://github.com/sterenczak-marek/awesomegame-common.git
+
+uwsgi
+opbeat
