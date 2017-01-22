@@ -20,7 +20,7 @@ APPS_DIR = ROOT_DIR.path('src')
 
 env = environ.Env()
 
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = 'SET_ME'
 
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
