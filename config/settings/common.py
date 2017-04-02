@@ -48,6 +48,9 @@ THIRD_PARTY_APPS = (
 
     'rest_framework',
     'rest_framework.authtoken',
+
+    'djangobower',
+
 )
 
 # Apps specific for this project go here.
@@ -213,6 +216,8 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+
+    'djangobower.finders.BowerFinder',
 )
 
 # MEDIA CONFIGURATION
@@ -283,3 +288,15 @@ REST_FRAMEWORK = {
 #         'schedule': timedelta(seconds=5),
 #     },
 # }
+
+BOWER_COMPONENTS_ROOT = ROOT_DIR('vendor')
+
+BOWER_INSTALLED_APPS = (
+    "bootstrap#~3.3.1",
+    "font-awesome#~4.2.0",
+    "reset-css#",
+    "jquery#",
+    "lodash#3.7.0",
+    "phaser#~2.6.1",
+    "socket.io-client#0.9.16"
+)

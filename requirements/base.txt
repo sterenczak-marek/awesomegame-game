@@ -14,3 +14,5 @@ git+https://github.com/sterenczak-marek/awesomegame-common.git
 
 uwsgi
 opbeat
+
+django-bower==5.2.0
