@@ -1,19 +1,23 @@
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.decorators import login_required
+from awesome_rooms.models import Room
+from django.contrib.auth import authenticate, login
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import redirect
-from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView
+from ws4redis.publisher import RedisPublisher
 
 
-class IndexView(TemplateView):
+class IndexView(DetailView):
 
+    model = Room
     template_name = 'game/index.html'
 
-    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        return super(IndexView, self).dispatch(request, *args, **kwargs)
+
+        if request.user.is_authenticated():
+            return super(IndexView, self).dispatch(request, *args, **kwargs)
+
+        raise Http404
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)

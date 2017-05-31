@@ -189,7 +189,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # Your stuff: custom template context processors go here
 
-                'django.core.context_processors.static',
                 'ws4redis.context_processors.default',
             ],
         },
@@ -298,5 +297,6 @@ BOWER_INSTALLED_APPS = (
     "jquery#",
     "lodash#3.7.0",
     "phaser#~2.6.1",
-    "socket.io-client#0.9.16"
+    "socket.io-client#0.9.16",
+    "gentelella#1.4.0",
 )

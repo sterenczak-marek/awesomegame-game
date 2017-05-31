@@ -25,7 +25,7 @@ var awesomegame = {},
     addCamera = function () {
 
         game.camera.follow(user.component); //podąża za graczem
-        game.camera.deadzone = new Phaser.Rectangle(100, 100, 600, 200); //ustawienia kamery   .. , .. , prawo, dół
+        game.camera.deadzone = new Phaser.Rectangle(100, 100, 800, 300); //ustawienia kamery   .. , .. , prawo, dół
         game.camera.focusOnXY(user.component.x, user.component.y); //początkowe ustawienie punktu kamery
 
     };

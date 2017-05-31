@@ -1,0 +1,24 @@
+{% load staticfiles %}
+<!-- top navigation -->
+<div class="top_nav">
+    <div class="nav_menu">
+        <nav class="" role="navigation">
+            <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+            </div>
+
+            {% if request.user.is_authenticated %}
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="">
+                        <a class="user-profile dropdown-toggle" data-toggle="dropdown"
+                           aria-expanded="false">
+                            <img src="{% static 'gentelella/production/images/img.jpg' %}"
+                                 alt="">{{ request.user }}
+                        </a>
+                    </li>
+                </ul>
+            {% endif %}
+        </nav>
+    </div>
+</div>
+<!-- /top navigation -->

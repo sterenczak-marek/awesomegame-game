@@ -11,10 +11,10 @@ from src.game.views import IndexView, LoginView
 
 urlpatterns = [
     url(r'^api/', include('src.api.urls', namespace="api")),
-                  url(r'^api-token-auth/', views.obtain_auth_token),
+    url(r'^api-token-auth/', views.obtain_auth_token),
 
-    url(r'^game/(?P<id>[0-9]+)$', IndexView.as_view(), name="room"),
-    url(r'^(?P<token>[\w]+)/$', LoginView.as_view(), name="login"),
+    url(r'^game/(?P<pk>[0-9]+)$', IndexView.as_view(), name="room"),
+    url(r'^(?P<token>[\w]{32})/$', LoginView.as_view(), name="login"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
