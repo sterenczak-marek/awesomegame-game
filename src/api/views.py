@@ -1,9 +1,17 @@
-from awesome_rooms.models import Room
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import IsAuthenticated
+import json
 
-from .serializers import RoomSerializer
+import requests
+from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.generics import CreateAPIView, UpdateAPIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+from src.game.models import Room, PanelAuthentication
+from .serializers import RoomSerializer, UserWinnerSerializer
+
+UserModel = get_user_model()
 
 
 class RoomCreateView(CreateAPIView):
@@ -12,3 +20,42 @@ class RoomCreateView(CreateAPIView):
 
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
+
+    def create(self, request, *args, **kwargs):
+        auth_token = self.request.data.pop('auth_token')
+
+        PanelAuthentication.objects.update_or_create(
+            site_id=2,
+            token=auth_token
+        )
+        return super(RoomCreateView, self).create(request, *args, **kwargs)
+
+
+class UserWinView(UpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
+
+    serializer_class = UserWinnerSerializer
+    model = UserModel
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        super(UserWinView, self).update(request, *args, **kwargs)
+
+        data = {
+            'winner': self.request.user.username
+        }
+
+        panel_site = Site.objects.get(id=2)
+
+        panel_response = requests.post(
+            "http://%s/api/rooms/%s/finished/" % (panel_site.domain, self.request.user.room.panel_room_slug),
+            data=json.dumps(data),
+            headers={
+                "Authorization": "Token %s" % panel_site.panel_authentication.token,
+                "Content-Type": "application/json",
+            })
+
+        return Response(status=panel_response.status_code, headers=panel_response.headers)

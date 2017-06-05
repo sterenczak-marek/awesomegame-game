@@ -3,6 +3,10 @@ var counter = 0,
 
 function createGame(data) {
 
+    $('#score_table .user-lives').each(function (index, item) {
+        $(this).html(3);
+    });
+
     game = new Phaser.Game(1000, 500, Phaser.CANVAS, 'game', {
         preload: preload,
         create: create,
@@ -50,7 +54,6 @@ function createGame(data) {
 
         // Maintain aspect ratio
         game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-
 
         game.world.setBounds(
             -awesomegame.CONSTANTS.mapSize / 2,
@@ -131,10 +134,12 @@ function createGame(data) {
         fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         fullScreenButton = game.input.keyboard.addKey(Phaser.Keyboard.TAB);
 
-        user = new awesomegame.MODEL.User(playerNick);
+        user = new awesomegame.MODEL.User(playerNick, room_slug);
         user.addComponent(pos_x, pos_y);
         backToLive(user);
         bullets.setAll('owner', user);
+
+        send_player_win();
 
         resetPlayersPositions(data);
 

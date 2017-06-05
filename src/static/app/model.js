@@ -250,6 +250,8 @@ function damage(affectedUser, killer) {
     affectedUser.health--;
     affectedUser.healthBar.kill();
 
+    $('#score_table #user-' + affectedUser.nick + '-lives').html(affectedUser.health);
+
     switch (affectedUser.health) {
         case 2:
             affectedUser.healthBar = game.add.sprite(affectedUser.component.x - 20, affectedUser.component.y - 60, "twoHealthPoints");
@@ -262,9 +264,41 @@ function damage(affectedUser, killer) {
                 game.camera.follow(killer.component);
             }
             explode(affectedUser);
+
+            var all_players_dead = true;
+            $.each(opponents, function (index, item) {
+                if (item.health != 0) {
+                    all_players_dead = false;
+                }
+            });
+
+            if (all_players_dead) {
+                var data = {
+                    'type': "WIN",
+                    'data': {
+                        'winner': user.nick
+                    }
+                };
+
+                ws4redis.send_message(JSON.stringify(data));
+
+                send_player_win();
+            }
             break;
     }
 };
+
+function send_player_win() {
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajax({
+        type: 'PUT',
+        url: '/api/user/win/',
+        headers: {
+            "X-CSRFToken": csrftoken
+        }
+    })
+}
 
 function regenerate(affectedUser) {
     affectedUser.healthBar.kill();
@@ -281,3 +315,25 @@ function regenerate(affectedUser) {
             break;
     }
 };
+
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}

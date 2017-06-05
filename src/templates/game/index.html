@@ -56,14 +56,14 @@
         <thead>
         <tr>
             <th>Gracz</th>
-            <th>Punkty</th>
+            <th>Życia</th>
         </tr>
         </thead>
         <tbody>
         {% for user in object.users.all %}
             <tr id="user-{{ user.pk }}">
                 <td>{{ user }}</td>
-                <td>{{ user.points }}</td>
+                <td><span id="user-{{ user.username }}-lives" class="user-lives"></span>/3</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -75,10 +75,18 @@
 
     <script type="text/javascript">
         var playerNick = "{{ user.username }}",
+            room_slug = "{{ user.room.slug }}",
             pos_x = {{ x }},
             pos_y = {{ y }};
 
     </script>
+{##}
+{#    <script type="text/javascript">#}
+{#        window.onbeforeunload = function(e) {#}
+{#            e.preventDefault();#}
+{#            return "Odświeżenie strony spowoduje utrate gry";#}
+{#        }#}
+{#    </script>#}
 
     <script src="{% static 'app/sockets.js' %}"></script>
     <script type="text/javascript">

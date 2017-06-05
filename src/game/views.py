@@ -1,10 +1,10 @@
-from awesome_rooms.models import Room
 from django.contrib.auth import authenticate, login
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import redirect
-from django.views.generic import TemplateView, DetailView
-from ws4redis.publisher import RedisPublisher
+from django.views.generic import DetailView, TemplateView
+
+from src.game.models import Room
 
 
 class IndexView(DetailView):

@@ -244,6 +244,8 @@ AUTHENTICATION_BACKENDS = (
 )
 
 AUTH_USER_MODEL = 'game.Player'
+ROOM_MODEL = 'game.Room'
+
 
 # Some really nice defaults
 # ACCOUNT_AUTHENTICATION_METHOD = 'username'
