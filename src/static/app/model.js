@@ -273,20 +273,36 @@ function damage(affectedUser, killer) {
             });
 
             if (all_players_dead) {
-                var data = {
-                    'type': "WIN",
-                    'data': {
-                        'winner': user.nick
-                    }
-                };
+                send_winner();
 
-                ws4redis.send_message(JSON.stringify(data));
-
-                send_player_win();
+                playerWin({winner: user.nick});
             }
             break;
     }
 };
+
+function send_winner() {
+    var data = {
+        'type': "WIN",
+        'data': {
+            'winner': user.nick
+        }
+    };
+
+    ws4redis.send_message(JSON.stringify(data));
+
+}
+
+function send_reload_url(url) {
+    var data = {
+        'type': 'RELOAD',
+        'data': {
+            'url': url
+        }
+    };
+
+    ws4redis.send_message(JSON.stringify(data));
+}
 
 function send_player_win() {
     var csrftoken = getCookie('csrftoken');
@@ -296,6 +312,14 @@ function send_player_win() {
         url: '/api/user/win/',
         headers: {
             "X-CSRFToken": csrftoken
+        },
+        success: function (data, status, xhr) {
+
+            var parsed_data = JSON.parse(data);
+
+            send_reload_url(parsed_data.url);
+            move_to_panel(parsed_data);
+
         }
     })
 }

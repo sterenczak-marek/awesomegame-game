@@ -22,7 +22,7 @@ class RoomCreateView(CreateAPIView):
     serializer_class = RoomSerializer
 
     def create(self, request, *args, **kwargs):
-        auth_token = self.request.data.pop('auth_token')
+        auth_token = request.data.pop('auth_token')
 
         PanelAuthentication.objects.update_or_create(
             site_id=2,
@@ -45,7 +45,9 @@ class UserWinView(UpdateAPIView):
         super(UserWinView, self).update(request, *args, **kwargs)
 
         data = {
-            'winner': self.request.user.username
+            'winner': {
+                'panel_user_id': self.request.user.panel_user_id
+            }
         }
 
         panel_site = Site.objects.get(id=2)
@@ -58,4 +60,14 @@ class UserWinView(UpdateAPIView):
                 "Content-Type": "application/json",
             })
 
-        return Response(status=panel_response.status_code, headers=panel_response.headers)
+        if panel_response.status_code == 200:
+            room = self.request.user.room
+
+            room.delete()
+            data = json.loads(panel_response.json())
+
+            url = "http://%s%s" % (panel_site.domain, data['url_path'])
+
+            return Response(status=panel_response.status_code, data=json.dumps({'url': url}))
+
+        return Response(status=panel_response.status_code, data=panel_response.content)

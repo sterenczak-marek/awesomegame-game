@@ -3,12 +3,11 @@ from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 from src.game.models import Room
-from src.game.serializers import PlayerSerializer
 
 UserModel = get_user_model()
 
 
-class UserGameServerSerializer(PlayerSerializer):
+class UserGameServerSerializer(serializers.ModelSerializer):
     username = serializers.CharField()
     token = serializers.SerializerMethodField(read_only=True)
     panel_user_id = serializers.IntegerField()
@@ -29,12 +28,12 @@ class RoomSerializer(serializers.ModelSerializer):
         room = super(RoomSerializer, self).create(validated_data)
 
         for user in user_data:
-            qs = UserModel.objects.filter(username=user['username'])
+            qs = UserModel.objects.filter(panel_user_id=user['panel_user_id'])
 
             if qs.exists():
                 user = qs.get()
             else:
-                serializer = PlayerSerializer(data=user)
+                serializer = UserGameServerSerializer(data=user)
                 if serializer.is_valid():
                     user = serializer.save()
                 else:

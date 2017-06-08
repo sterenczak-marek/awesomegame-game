@@ -13,12 +13,23 @@ function receiveMessage(msg) {
         bonusData(parser.data);
     } else if (parser.type === "PICKED_BONUS") {
         bonusPicketData(parser.data);
+    } else if (parser.type === "WIN") {
+        playerWin(parser.data);
+    } else if (parser.type === "RELOAD") {
+        move_to_panel(parser.data)
     }
 }
 
 function initialData(data) {
     addOpponent(data);
 
+}
+
+function move_to_panel(data) {
+
+    setTimeout(function () {
+        window.location = data.url;
+    }, 5000);
 }
 
 function moveData(data) {
@@ -101,6 +112,39 @@ function addOpponent(data) {
     }
 }
 
+function playerWin(data) {
+    var username = String(data.winner);
+
+    if (username === playerNick) {
+        show_stack_modal('success');
+        send_player_win();
+    } else {
+        show_stack_modal('failure')
+    }
+
+    function show_stack_modal(type) {
+
+        var opts = {
+            title: 'Koniec gry!',
+            content: '',
+            buttons: {},
+        };
+        switch (type) {
+            case 'failure':
+                opts.content = "<h2>Przegrałeś! Wygrał gracz " + username + "</h2>";
+                opts.type = "red";
+                break;
+            case 'success':
+                opts.content = "<h1>Wygrałeś!</h1>";
+                opts.type = "green";
+                break;
+        }
+
+        opts.content += "<p>Wkrótce zostaniesz przekierowany do panelu zarządzającego</p>";
+        $.dialog(opts);
+    }
+}
+
 function prepareClientServerConnection() {
 
     socket.on('sendNewPlayerToAllPlayersInRoom', function (data) {
@@ -164,10 +208,10 @@ function prepareClientServerConnection() {
                 cp.team = parser.team;
 
                 $("#list > p")
-                .filter(function (index) {
-                    $(this).attr("id") === "nick" + cp.nick;
-                })
-                .css('color', cp.team);
+                    .filter(function (index) {
+                        $(this).attr("id") === "nick" + cp.nick;
+                    })
+                    .css('color', cp.team);
             }
         }
 
@@ -196,15 +240,15 @@ function prepareClientServerConnection() {
     socket.on('sendNewPositionsToAllPlayersInRoom', function (data) {
 
         var parser = JSON.parse(data),
-        moveOpponent = function (opponent) {
+            moveOpponent = function (opponent) {
 
-            if (opponent.nick === parser.id) {
+                if (opponent.nick === parser.id) {
 
-                opponent.component.angle = parser.angle;
-                opponent.component.currentSpeed = parser.speed;
-                opponent.component.lastKey = parser.lastKey;
-            }
-        };
+                    opponent.component.angle = parser.angle;
+                    opponent.component.currentSpeed = parser.speed;
+                    opponent.component.lastKey = parser.lastKey;
+                }
+            };
 
         allComputerPlayers.forEach(moveOpponent);
 
@@ -286,10 +330,10 @@ function prepareClientServerConnection() {
         var parser = JSON.parse(data);
 
         //allComputerPlayers.forEach(function (computerPlayer) {
-            if (parser.color == "red")
-                mode._redFlag.reset(parser.fullReset);
-            else
-                mode._blueFlag.reset(parser.fullReset);
+        if (parser.color == "red")
+            mode._redFlag.reset(parser.fullReset);
+        else
+            mode._blueFlag.reset(parser.fullReset);
         //});
     });
 
@@ -322,8 +366,8 @@ function prepareClientServerConnection() {
         $(function () {
 
             var note = $('#note'),
-            ts = new Date(),
-            newYear = true;
+                ts = new Date(),
+                newYear = true;
 
             ts = (new Date()).getTime() + 6 * 1000;
             newYear = false;
@@ -372,18 +416,18 @@ function prepareClientServerConnection() {
         for (var i = 0; i < walls.length; ++i) {
             if (i % 2 === 0)
                 var wall = new awesomegame.MAPOBJECTS.Wall(
-                                                           walls[i].x * 40 - 1000,
-                                                           walls[i].y * 40 - 1000,
-                                                           walls[i].hScale / 2,
-                                                           walls[i].vScale
-                                                           );
+                    walls[i].x * 40 - 1000,
+                    walls[i].y * 40 - 1000,
+                    walls[i].hScale / 2,
+                    walls[i].vScale
+                );
             else
                 var wall = new awesomegame.MAPOBJECTS.Wall(
-                                                           walls[i].x * 40 - 1000,
-                                                           walls[i].y * 40 - 1000,
-                                                           walls[i].hScale,
-                                                           walls[i].vScale / 2
-                                                           );
+                    walls[i].x * 40 - 1000,
+                    walls[i].y * 40 - 1000,
+                    walls[i].hScale,
+                    walls[i].vScale / 2
+                );
         }
 
     });
@@ -391,7 +435,7 @@ function prepareClientServerConnection() {
     socket.on('playerPickedBonusFromServer', function (data) {
 
         var parser = JSON.parse(data),
-        bonus = awesomegame.BONUSES.BonusList.get(parseInt(parser.bonusIndex));
+            bonus = awesomegame.BONUSES.BonusList.get(parseInt(parser.bonusIndex));
 
         if (user.nick === parser.id) {
 

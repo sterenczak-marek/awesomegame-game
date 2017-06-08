@@ -139,8 +139,6 @@ function createGame(data) {
         backToLive(user);
         bullets.setAll('owner', user);
 
-        send_player_win();
-
         resetPlayersPositions(data);
 
         addCamera();

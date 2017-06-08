@@ -301,4 +301,5 @@ BOWER_INSTALLED_APPS = (
     "phaser#~2.6.1",
     "socket.io-client#0.9.16",
     "gentelella#1.4.0",
+    "craftpip/jquery-confirm"
 )

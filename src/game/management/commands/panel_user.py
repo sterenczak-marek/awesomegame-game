@@ -5,7 +5,7 @@ from src.game.models import Player
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        (player, _) = Player.objects.get_or_create(username="admin", defaults={
+        (player, _) = Player.objects.get_or_create(username="system: panel", defaults={
             'password': "!"
         })
         (token, _) = Token.objects.get_or_create(user=player)
