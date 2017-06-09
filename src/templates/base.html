@@ -38,7 +38,7 @@
             <div class="col-md-3 left_col menu_fixed">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="/" class="site_title"><span>AwesomeGame</span></a>
+                        <a href="/" class="site_title"><span>{{ site.name }}</span></a>
                     </div>
 
                     <div class="clearfix"></div>
@@ -46,7 +46,7 @@
                     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                         <div class="menu_section">
                             <ul class="nav side-menu">
-                                <li><a href="http://localhost:8000"><i class="fa fa-home"></i>Panel zarządzający</a></li>
+                                <li><a href="{{ panel_url }}"><i class="fa fa-home"></i>Panel zarządzający</a></li>
 
                                 {% if request.user.is_authenticated %}
                                     <li><a href="{% url 'room' request.user.room.pk %}"><i class="fa fa-edit"></i>Rozgrywka</a></li>

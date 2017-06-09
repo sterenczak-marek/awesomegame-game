@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import redirect
@@ -25,7 +26,9 @@ class IndexView(DetailView):
         x, y = self.request.user.positions
         context.update({
             'x': x,
-            'y': y
+            'y': y,
+            'panel_url': 'http://%s' % Site.objects.get(id=2).domain,
+            'site': Site.objects.get(id=1)
         })
         return context
 

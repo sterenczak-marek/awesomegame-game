@@ -28,6 +28,11 @@ class Player(GameUser):
     room = models.ForeignKey(Room, null=True, on_delete=models.SET_NULL, related_name='users')
     panel_user_id = models.PositiveIntegerField(null=True)
 
+    username = models.CharField(
+        max_length=30,
+        unique=False,
+    )
+
     @property
     def positions(self):
         if not self.__positions:

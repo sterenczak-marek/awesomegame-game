@@ -134,6 +134,10 @@ function createGame(data) {
         fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         fullScreenButton = game.input.keyboard.addKey(Phaser.Keyboard.TAB);
 
+
+        var right = $('#game > canvas').css('margin-right');
+        $('#score_table').css('right', parseFloat(right) + 900);
+
         user = new awesomegame.MODEL.User(playerNick, room_slug);
         user.addComponent(pos_x, pos_y);
         backToLive(user);
